@@ -1,31 +1,9 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-paper';
-import {useDispatch} from 'react-redux';
-import {Auth, Hub} from 'aws-amplify';
-
-import {setUser} from '../../redux/features/auth';
+import {Auth} from 'aws-amplify';
 
 const AuthScreen = () => {
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    const subscription = Hub.listen('auth', ({payload: {event, data}}) => {
-      switch (event) {
-        case 'signIn':
-          dispatch(setUser({user: {username: data.username}}));
-          break;
-        case 'signOut':
-          dispatch(setUser({user: null}));
-          break;
-        default:
-          break;
-      }
-    });
-
-    return subscription;
-  }, []);
-
   return (
     <View>
       <Button

@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
-import {Auth} from 'aws-amplify';
+import {Auth, Hub} from 'aws-amplify';
 
 import {setUser} from '../../redux/features/auth';
 
@@ -15,6 +15,23 @@ export default function StackRoot() {
   const userState = useSelector(state => state.auth.user);
 
   React.useEffect(() => {
+    const subscription = Hub.listen('auth', ({payload: {event, data}}) => {
+      switch (event) {
+        case 'signIn':
+          dispatch(setUser({user: {username: data.username}}));
+          break;
+        case 'signOut':
+          dispatch(setUser({user: null}));
+          break;
+        default:
+          break;
+      }
+    });
+
+    return subscription;
+  }, [dispatch]);
+
+  React.useEffect(() => {
     Auth.currentAuthenticatedUser()
       .then(user => {
         dispatch(setUser({user: {username: user.username}}));
@@ -24,7 +41,7 @@ export default function StackRoot() {
 
   return (
     <StackNav.Navigator>
-      {userState ? (
+      {userState.user ? (
         <StackNav.Screen name="App" component={HomeScreen} />
       ) : (
         <StackNav.Screen name="Auth" component={AuthScreen} />
