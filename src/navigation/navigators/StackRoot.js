@@ -7,7 +7,7 @@ import Auth from '../screens/Auth';
 const StackNav = createStackNavigator();
 
 export default function StackRoot({userToken}) {
-  userToken = 'asdf';
+  // userToken = 'asdf';
 
   return (
     <StackNav.Navigator>
