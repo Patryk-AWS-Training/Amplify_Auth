@@ -3,8 +3,8 @@ import {Provider} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider as UIProvider} from 'react-native-paper';
 
-import store from './src/redux';
-import StackRoot from './src/navigation';
+import store from './redux';
+import StackRoot from './navigation';
 
 const App = () => {
   return (
